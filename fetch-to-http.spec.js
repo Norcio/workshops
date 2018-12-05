@@ -1,3 +1,6 @@
+const fetch = require('jest-fetch-mock');
+jest.setMock('node-fetch', fetch);
+
 const createHttpService = require('./fetch-to-http');
 const SWAPIService = require('./swapi-service');
 
@@ -16,3 +19,12 @@ test("Response should be 200", async () => {
   expect(serverResponse.status).toEqual(200);
 });
 
+test("Name should be Test", async () => {
+  fetch.mockResponse(JSON.stringify(
+    {
+      name: 'Test'
+    }
+  ));
+  let serverResponse = await SWAPIResponse.fetchPerson(1);
+  expect(serverResponse.body.name).toEqual('Test');
+});
